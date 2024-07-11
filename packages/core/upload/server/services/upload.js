@@ -125,6 +125,7 @@ module.exports = ({ strapi }) => ({
       mime: type,
       size: bytesToKbytes(size),
       sizeInBytes: size,
+      uploadDestination: fileInfo.uploadDestination
     };
 
     const { refId, ref, field } = metas;
@@ -195,6 +196,8 @@ module.exports = ({ strapi }) => ({
     const tmpWorkingDirectory = await createAndAssignTmpWorkingDirectoryToFiles(files);
 
     let uploadedFiles = [];
+
+    console.log(data, files);
 
     try {
       const { fileInfo, ...metas } = data;
@@ -286,7 +289,12 @@ module.exports = ({ strapi }) => ({
    * and responsive formats (if enabled).
    */
   async uploadFileAndPersist(fileData, { user } = {}) {
+    console.log("KK", fileData);
     const config = strapi.config.get('plugin.upload');
+    console.log("JJJJJ", fileData.name );
+    console.log("gameeee", config);
+    console.log("gameeee", config.providerOptions.params.Bucket);
+    config.providerOptions.params.Bucket =  'strapi-test-veera/game';
     const { isImage } = getService('image-manipulation');
 
     await getService('provider').checkFileSize(fileData);
